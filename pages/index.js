@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import Head from "next/head";
 import sortBy from "lodash/sortBy";
 
-const cardDiameter = "4.89in";
+const cardDiameter = "4.88in";
 
 const wordCount = 72;
 
@@ -155,7 +155,7 @@ function FieldArray({ value, onChange }) {
             onChange(randWords);
           }}
         >
-          Get random words
+          🤡 Get random words
         </button>
       </div>
     </div>
@@ -166,7 +166,7 @@ export default function IndexPage() {
   const [words, setWords] = useState(() => ["Some phrase", "Another phrase"]);
   const [shuffled, setShuffled] = useState(null);
 
-  const [cardWords1, cardWords2] = useMemo(() => {
+  const [card1Words, card2Words] = useMemo(() => {
     const arr = getWordsArray(words, shuffled);
     return [arr.slice(0, wordCount), arr.slice(wordCount)];
   }, [words, shuffled]);
@@ -197,10 +197,10 @@ export default function IndexPage() {
 
         <div className="flex justify-center items-center mt-8 print:m-0">
           <div>
-            <RenderCard words={cardWords1} />
-            <RenderCard words={cardWords2} />
+            <RenderCard words={card1Words} />
+            <RenderCard words={card2Words} />
             <div className="hide-printer p-2">
-              <label>
+              <label className="hover:bg-gray-100 rounded cursor-pointer px-2 py-1">
                 <input
                   type="checkbox"
                   className="mr-2"
@@ -221,7 +221,7 @@ export default function IndexPage() {
 
       <footer className="flex items-center justify-center w-full h-24 border-t hide-printer">
         <a
-          className="flex items-center justify-center"
+          className="flex items-center justify-center hover:underline"
           href="https://wyattades.com"
           target="_blank"
           rel="noopener noreferrer"
@@ -241,6 +241,10 @@ export default function IndexPage() {
         }
         @page {
           margin: 0.4in 0.4in 0.4in 0.4in;
+        }
+
+        ::selection {
+          background: lavender;
         }
       `}</style>
     </div>
