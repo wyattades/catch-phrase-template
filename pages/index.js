@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import Head from "next/head";
 import sortBy from "lodash/sortBy";
+import uniqBy from "lodash/uniqBy";
 
 const cardDiameter = "4.88in";
 
@@ -43,6 +44,8 @@ class PsuedoRandom {
 }
 
 const getWordsArray = (words = [], shuffled = null) => {
+  words = uniqBy(words, (w) => w.toLowerCase());
+
   if (words.length > wordCount * 2) words = words.slice(0, wordCount * 2);
   else if (words.length < wordCount * 2)
     words = [
@@ -128,7 +131,35 @@ function RenderCard({ words }) {
   );
 }
 
-function FieldArray({ value, onChange }) {
+function Checkbox({ value, onChange, label }) {
+  return (
+    <label className="hover:bg-gray-100 rounded cursor-pointer px-2 py-1 flex items-center">
+      <input
+        type="checkbox"
+        className="mr-2"
+        checked={value ?? false}
+        onChange={(e) => {
+          onChange(e.target.checked);
+        }}
+      />
+      <span className="leading-1">{label}</span>
+    </label>
+  );
+}
+
+function Button({ children, onClick }) {
+  return (
+    <button
+      className="rounded border hover:bg-gray-100 px-2 py-1"
+      onClick={onClick}
+      type="button"
+    >
+      {children}
+    </button>
+  );
+}
+
+function PhrasesEditor({ value, onChange }) {
   const [val, setVal] = useState(value.join("\n"));
 
   return (
@@ -152,8 +183,7 @@ function FieldArray({ value, onChange }) {
         Word count: {value.length} out of {wordCount * 2}
       </p>
       <div className="mt-4">
-        <button
-          className="rounded border hover:bg-gray-100 px-2 py-1"
+        <Button
           onClick={async () => {
             const randWords = await fetch(`/api/words`).then((r) => r.json());
 
@@ -162,7 +192,7 @@ function FieldArray({ value, onChange }) {
           }}
         >
           🤡 Get random words
-        </button>
+        </Button>
       </div>
     </div>
   );
@@ -206,22 +236,16 @@ export default function IndexPage() {
             <RenderCard words={card1Words} />
             <RenderCard words={card2Words} />
             <div className="hide-printer p-2">
-              <label className="hover:bg-gray-100 rounded cursor-pointer px-2 py-1">
-                <input
-                  type="checkbox"
-                  className="mr-2"
-                  checked={shuffled != null}
-                  onChange={(e) => {
-                    setShuffled(
-                      e.target.checked ? (Math.random() * 10e8) | 0 : null
-                    );
-                  }}
-                />
-                Shuffle words
-              </label>
+              <Checkbox
+                label="Shuffle words"
+                value={shuffled != null}
+                onChange={(checked) => {
+                  setShuffled(checked ? (Math.random() * 10e8) | 0 : null);
+                }}
+              />
             </div>
           </div>
-          <FieldArray value={words} onChange={setWords} />
+          <PhrasesEditor value={words} onChange={setWords} />
         </div>
       </main>
 
@@ -246,7 +270,7 @@ export default function IndexPage() {
           }
         }
         @page {
-          margin: 0.4in 0.4in 0.4in 0.4in;
+          margin: 0.4in;
         }
 
         ::selection {
