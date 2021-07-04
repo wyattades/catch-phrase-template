@@ -7,11 +7,11 @@ const cardDiameter = "4.88in";
 
 const wordCount = 72;
 
-const scale = 100 / (366 * 2);
+const scale = 100 / 742;
 const cardRadius = 50;
-const innerCircleRadius = 68 * scale;
+const innerCircleRadius = 69 * scale;
 const outerCircleRadius = 15 * scale;
-const outerCircleOffset = 336 * scale;
+const outerCircleOffset = 340 * scale;
 const wordOffset = 247 * scale;
 
 const isMacLike =
@@ -118,7 +118,6 @@ function RenderCard({ words }) {
                 y={50}
                 dominantBaseline="middle"
                 textAnchor="middle"
-                style={{ fontSize: 2, fontWeight: 600, fontFamily: "Arial" }}
                 transform={`rotate(${angle} 50 50)`}
               >
                 {w}
@@ -127,13 +126,21 @@ function RenderCard({ words }) {
           })}
         </svg>
       </div>
+
+      <style jsx>{`
+        text {
+          font-size: 2.1px;
+          font-weight: 600;
+          font-family: Arial;
+        }
+      `}</style>
     </div>
   );
 }
 
 function Checkbox({ value, onChange, label }) {
   return (
-    <label className="hover:bg-gray-100 rounded cursor-pointer px-2 py-1 flex items-center">
+    <label className="hover:bg-gray-100 rounded cursor-pointer px-2 py-1 inline-flex items-center">
       <input
         type="checkbox"
         className="mr-2"
