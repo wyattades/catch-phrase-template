@@ -83,18 +83,25 @@ function RenderCard({ words }) {
             stroke="#000"
           />
           {Array.from({ length: 3 }).map((_, i) => {
-            const angle = (Math.PI * 2 * i) / 3;
+            const angle = (360 * i) / 3;
 
             return (
-              <circle
+              <g
                 key={i}
-                cx={50 + Math.cos(angle) * outerCircleOffset}
-                cy={50 + Math.sin(angle) * outerCircleOffset}
-                r={outerCircleRadius}
-                fill="none"
-                strokeWidth="0.2"
-                stroke="#000"
-              />
+                transform={`rotate(${angle} 50 50) translate(${
+                  50 + outerCircleOffset
+                } ${50})`}
+              >
+                <circle
+                  x={0}
+                  y={0}
+                  r={outerCircleRadius}
+                  fill="none"
+                  strokeWidth="0.2"
+                  stroke="#000"
+                />
+                <circle x={0} y={0} r={0.4} fill="#000" />
+              </g>
             );
           })}
 
@@ -109,7 +116,6 @@ function RenderCard({ words }) {
                 dominantBaseline="middle"
                 textAnchor="middle"
                 style={{ fontSize: 2, fontWeight: 600, fontFamily: "Arial" }}
-                origin="50,50"
                 transform={`rotate(${angle} 50 50)`}
               >
                 {w}
